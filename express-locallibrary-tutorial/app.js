@@ -7,8 +7,9 @@ var mongoose = require('mongoose');
 var url = "mongodb+srv://cujothechief:14343297332@cluster0.8ke1xex.mongodb.net/LOCALLIBRARY?retryWrites=true&w=majority";
 const db = mongoose.connection;
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+let indexRouter = require("./routes/index");
+let userRouter = require("./routes/users");
+let catalogRouter = require("./routes/catalog");
 
 var app = express();
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -24,8 +25,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// app.use('/', indexRouter);
+// app.use('/users', usersRouter);
+// app.use('/catalog', catalogRouter);
+app.use("/", indexRouter);
+app.use("/users", userRouter);
+app.use("/catalog", catalogRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
