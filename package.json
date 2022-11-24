@@ -1,0 +1,9 @@
+{
+  "name": "demo-library",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/cujothechief/demo-library.git",
+  "author": "cujo <cujothechief@gmail.com>",
+  "license": "MIT",
+  "dependencies": {}
+}
