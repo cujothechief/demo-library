@@ -3,11 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
+var url = "mongodb+srv://cujothechief:14343297332@cluster0.8ke1xex.mongodb.net/LOCALLIBRARY?retryWrites=true&w=majority";
+const db = mongoose.connection;
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+db.on("error", console.error.bind(console, "mongodb connection error"));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
