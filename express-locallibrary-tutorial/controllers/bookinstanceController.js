@@ -1,8 +1,18 @@
-const Bookinstance = require("../models/bookinstance");
+const BookInstance = require("../models/bookinstance");
 
-bookinstance_list = (req, res) => {
-   res.send("NOT IMPLEMENTED: Bookinstance list");
-};
+const bookinstance_list = function (req, res, next) {
+   BookInstance.find()
+      .populate("book")
+      .exec(function (err, list_bookinstances) {
+         if (err) {
+            return next(err);
+         }
+         res.render("bookinstance_list", {
+            title: "Book Instance List",
+            bookinstance_list: list_bookinstances,
+         });
+      });
+}
 bookinstance_detail = (req, res) => {
    res.send(`NOT IMPLEMENTED: Bookinstance detail: ${req.params.id}`);
 };
