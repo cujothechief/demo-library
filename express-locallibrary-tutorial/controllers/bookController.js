@@ -42,9 +42,35 @@ let book_list = function (req, res, next) {
          res.render("book_list", { title: "Book List", book_list: list_books });
       });
 }
-book_detail = (req, res) => {
-   res.send(`NOT IMPLEMENTED: Book detail: ${req.params.id}`);
-};
+book_detail = (req, res, next) => {
+   async.parallel({
+      book(callback) {
+         Book.findById(req.params.id)
+            .populate("author")
+            .populate("genre")
+            .exec(callback);
+      },
+      book_instance(callback){
+         BookInstance.find({ book: req.params.id }).exec(callback);
+      },
+   },
+      (err, results) => {
+         if(err){
+            return next(err);
+         }
+         if(results.book == null){
+            const err = new Error("Book not found");
+            err.status = 404;
+            return next(err);
+         }
+         res.render("book_detail", {
+            title: results.book.title,
+            book: results.book,
+            book_instances: results.book_instance
+         })
+      }
+   )
+}
 book_create_get = (req, res) => {
    res.send("NOT IMPLEMENTED: Book create Get");
 };
