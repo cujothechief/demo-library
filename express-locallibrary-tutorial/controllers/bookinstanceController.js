@@ -1,6 +1,6 @@
 const BookInstance = require("../models/bookinstance");
 
-const bookinstance_list = function (req, res, next) {
+let bookinstance_list = function (req, res, next) {
    BookInstance.find()
       .populate("book")
       .exec(function (err, list_bookinstances) {
@@ -13,25 +13,40 @@ const bookinstance_list = function (req, res, next) {
          });
       });
 }
-bookinstance_detail = (req, res) => {
-   res.send(`NOT IMPLEMENTED: Bookinstance detail: ${req.params.id}`);
-};
-bookinstance_create_get = (req, res) => {
+let bookinstance_detail = (req, res, next) => {
+   BookInstance.findById(req.params.id)
+      .populate("book")
+      .exec((err, bookinstance) => {
+         if (err) {
+            return next(err);
+         }
+         if (bookinstance == null) {
+            const err = new Error("Book copy not found");
+            err.status = 404;
+            return next(err);
+         }
+         res.render("bookinstance_detail", {
+            title: `Copy: ${bookinstance.book.title}`,
+            bookinstance,
+         });
+      });
+}
+let bookinstance_create_get = (req, res) => {
    res.send("NOT IMPLEMENTED: Bookinstance create Get");
 };
-bookinstance_create_post = (req, res) => {
+let bookinstance_create_post = (req, res) => {
    res.send("NOT IMPLEMENTED: Bookinstance create POST");
 };
-bookinstance_delete_get = (req, res) => {
+let bookinstance_delete_get = (req, res) => {
    res.send("NOT IMPLEMENTED: Bookinstance delete GET");
 };
-bookinstance_delete_post = (req, res) => {
+let bookinstance_delete_post = (req, res) => {
    res.send("NOT IMPLEMENTED: Bookinstance update GET");
 };
-bookinstance_update_get = (req, res) => {
+let bookinstance_update_get = (req, res) => {
    res.send("NOT IMPLEMENTED: Bookinstance update GET");
 };
-bookinstance_update_post = (req, res) => {
+let bookinstance_update_post = (req, res) => {
    res.send("NOT IMPLEMENTED: Bookinstance update POST");
 };
 module.exports = {

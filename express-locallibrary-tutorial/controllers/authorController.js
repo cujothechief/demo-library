@@ -1,6 +1,8 @@
+const async = require("async");
+const Book = require("../models/book");
 const Author = require("../models/author");
 
-author_list = function (req, res, next) { 
+let author_list = function (req, res, next) { 
    Author.find()
       .sort([["family_name", "ascending"]])
       .exec(function (err, list_authors) {
@@ -13,22 +15,45 @@ author_list = function (req, res, next) {
          });
       });
 };
-author_detail = (req, res) => {
-   res.send(`NOT IMPLEMENTED: Author detail: ${req.params.id}`);
-};
-author_create_get = (req, res) => {
+let author_detail = (req, res, next) => {
+   async.parallel({
+      author(callback) {
+         Author.findById(req.params.id).exec(callback);
+      },
+      authors_books(callback) {
+         Book.find({ author: req.params.id }, "title summary").exec(callback);
+      },
+   },
+      (err, results) => {
+         if (err) {
+            return next(err);
+         }
+         if (results.author == null) {
+            const err = new Error("Author not found");
+            err.status = 404;
+            return next(err);
+         }
+         res.render("author_detail", {
+            title: "Author Detail",
+            author: results.author,
+            author_books: results.authors_books,
+         });
+      }
+   );
+}
+let author_create_get = (req, res) => {
    res.send("NOT IMPLEMENTED: Author create Get");
 };
-author_create_post = (req, res) => {
+let author_create_post = (req, res) => {
    res.send("NOT IMPLEMENTED: Author create POST");
 };
-author_delete_get = (req, res) => {
+let author_delete_get = (req, res) => {
    res.send("NOT IMPLEMENTED: Author delete GET");
 };
-author_delete_post = (req, res) => {
+let author_delete_post = (req, res) => {
    res.send("NOT IMPLEMENTED: Author update GET");
 };
-author_update_get = (req, res) => {
+let author_update_get = (req, res) => {
    res.send("NOT IMPLEMENTED: Author update GET");
 };
 author_update_post = (req, res) => {
