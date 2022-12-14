@@ -209,9 +209,9 @@ exports.book_update_get = (req, res, next) => {
    );
 };
 exports.book_update_post = [
-   (res, res, next) => {
+   (req, res, next) => {
       if (!Array.isArray(req.body.genre)) {
-         req.bodoy.genre = typeof req.body.genre === "undefined" ? [] : [req.body.genre];
+         req.body.genre = typeof req.body.genre === "undefined" ? [] : [req.body.genre];
       }
       next();
    },
@@ -255,7 +255,7 @@ exports.book_update_post = [
                if (err) {
                   return next(err);
                }
-               for (const gener of results.genre) {
+               for (const genre of results.genre) {
                   if (book.genre.includes(genre._id)) {
                      genre.checked = "true";
                   }
@@ -279,14 +279,3 @@ exports.book_update_post = [
       });
    },
 ];
-// module.exports = {
-//    index,
-//    book_list,
-//    book_detail,
-//    book_create_get,
-//    book_create_post,
-//    book_delete_get,
-//    book_delete_post,
-//    book_update_get,
-//    book_update_post,
-// }
